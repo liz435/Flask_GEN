@@ -32,6 +32,7 @@ def describtion(filename):
 
 def capture_image():
     cap = cv2.VideoCapture(0)
+    time.sleep(2)
     if not cap.isOpened():
         raise Exception("Error opening webcam")
     ret, frame = cap.read()
@@ -52,19 +53,15 @@ def home():
 
     
     if request.method == "POST":
-        if init:
-            os.remove('static/filename')
-        else:
-            filename = capture_image()
-            caption = describtion(filename)
-            init = True
+        filename = capture_image()
+        caption = describtion(filename)
+        init = True
 
         if caption:
 
             image_bytes = text_to_image({
                 "inputs" : "cat sitting on a rock",
             })
-
             try:
                 image_buffer = io.BytesIO(image_bytes)
                 image = Image.open(image_buffer)
