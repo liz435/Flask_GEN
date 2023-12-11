@@ -1,0 +1,40 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <title>Home</title>
+  </head>
+  <body>
+    <div class="main">
+      <form action="/" method="post" id="captureForm">
+        <button type="submit" onclick="captureImage()">Capture Image</button>
+      </form>
+    </div>
+
+    <div>
+      {% if filename %}
+      <img src="{{url_for('static', filename = filename )}}" alt="User Image" />
+      {% endif %}
+    </div>
+    
+    <div>
+      {% if caption %}
+      <p>Caption: {{ caption }}</p>
+      {% endif %}
+    </div>
+
+
+
+    <script>
+      function captureImage() {
+        // Submit the form to trigger the capture process
+        document.getElementById("captureForm").submit();
+      }
+    </script>
+  </body>
+</html>
