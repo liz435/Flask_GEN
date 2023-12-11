@@ -64,7 +64,7 @@ def home():
                 image.save("output.jpg", format="JPEG")
             except Exception as e:
                 print(f"Unexpected error: {e}")
-
+                
     return render_template('index.html', filename=filename, caption=caption, image=image)
 
 if __name__ == '__main__':
