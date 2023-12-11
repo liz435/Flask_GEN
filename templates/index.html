@@ -11,28 +11,35 @@
   </head>
   <body>
     <div class="main">
-      <form action="/" method="post" id="captureForm">
+      <form action="/" method="post" id="captureForm" class = 'btn'>
         <button type="submit" onclick="captureImage()">Capture Image</button>
       </form>
     </div>
 
-    <div>
+    <div class="img">
       {% if filename %}
       <img src="{{url_for('static', filename = filename )}}" alt="User Image" />
       {% endif %}
     </div>
     
-    <div>
+  
+
+    <div class = 'cap'>
       {% if caption %}
-      <p>Caption: {{ caption }}</p>
+      <p>Generated Caption: {{ caption }}</p>
       {% endif %}
     </div>
+
+    <div class="img">
+        {% if image %}
+        <img src="{{url_for('static', filename = image )}}" alt="Generated Image" />
+        {% endif %}
+      </div>
 
 
 
     <script>
       function captureImage() {
-        // Submit the form to trigger the capture process
         document.getElementById("captureForm").submit();
       }
     </script>

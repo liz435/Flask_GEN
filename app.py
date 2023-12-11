@@ -1,69 +1,69 @@
-from flask import Flask, render_template, request, url_for, redirect, jsonify
+from flask import Flask, render_template, request, send_file
+from io import BytesIO
 
 import requests
 import cv2
-import io
+import os
 from PIL import Image
-
+import io
 
 app = Flask(__name__)
-
 
 API_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
 headers = {"Authorization": "Bearer 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"}
 
+# def serve_pil_image(pil_img):
+#     img_io = BytesIO()
+#     pil_img.save(img_io, 'JPEG', quality=70)
+#     img_io.seek(0)
+#     return send_file(img_io, mimetype='image/jpeg')
 
-def textToImage(payload):
+def text_to_image(payload):
     response = requests.post(API_URL, headers=headers, json=payload)
-    with open("static/generated_image.jpg", "wb") as f:
-        f.write(response.content)
-    return "static/generated_image.jpg"
-
-
+    return response.content
 
 
 def query(filename):
-    with open(filename, "rb") as f:
+    with open("static/" + filename, "rb") as f:
         data = f.read()
     response = requests.post(API_URL, headers=headers, data=data)
     return response.json()
 
 def capture_image():
-    # Initialize the webcam
     cap = cv2.VideoCapture(0)
-    # Check if the webcam is opened successfully
     if not cap.isOpened():
         raise Exception("Error opening webcam")
-    # Capture a frame
     ret, frame = cap.read()
-    # Check if the frame is captured successfully
     if not ret:
         raise Exception("Error capturing image")
-    # Release the webcam
     cap.release()
-    # Save the captured frame as an image
-    cv2.imwrite("captured_image.jpg", frame)
-    cv2.imwrite("static/captured_image.jpg", frame)
-    return "captured_image.jpg"
 
+    filename = "captured_image.jpg"
+    cv2.imwrite("static/" + filename, frame)
+    return filename
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
     filename = None
     caption = None
+    image_bytes = None
+    image = None
     
     if request.method == "POST":
         filename = capture_image()
         caption = query(filename)
-        print(caption)
 
-        image = textToImage({
-        "inputs": 'Astronaut riding a horse',
-    })
+        if caption:
 
+            image_bytes = text_to_image({
+                "inputs" : "cat sitting on a rock",
+            })
+            print(image_bytes)
+            print('imhere')
 
+            # image = Image.open(io.BytesIO(image_bytes))
 
-    return render_template('index.html', filename=filename, caption=caption, image =image)
+    return render_template('index.html', filename=filename, caption=caption[0]['generated_text'], image=image)
 
 if __name__ == '__main__':
     print('running this cell')
