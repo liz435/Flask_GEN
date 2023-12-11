@@ -6,6 +6,7 @@ import cv2
 import os
 from PIL import Image
 import io
+import time
 
 app = Flask(__name__)
 
@@ -47,10 +48,16 @@ def home():
     filename = None
     caption = None
     image = None
+    init = False
+
     
     if request.method == "POST":
-        filename = capture_image()
-        caption = describtion(filename)
+        if init:
+            os.remove('static/filename')
+        else:
+            filename = capture_image()
+            caption = describtion(filename)
+            init = True
 
         if caption:
 
