@@ -23,7 +23,7 @@ def text_to_image(payload):
     return response.content
 
 
-def query(filename):
+def describtion(filename):
     with open("static/" + filename, "rb") as f:
         data = f.read()
     response = requests.post(API_URL, headers=headers, data=data)
@@ -46,24 +46,26 @@ def capture_image():
 def home():
     filename = None
     caption = None
-    image_bytes = None
     image = None
     
     if request.method == "POST":
         filename = capture_image()
-        caption = query(filename)
+        caption = describtion(filename)
 
         if caption:
 
             image_bytes = text_to_image({
                 "inputs" : "cat sitting on a rock",
             })
-            print(image_bytes)
-            print('imhere')
 
-            # image = Image.open(io.BytesIO(image_bytes))
+            try:
+                image_buffer = io.BytesIO(image_bytes)
+                image = Image.open(image_buffer)
+                image.save("output.jpg", format="JPEG")
+            except Exception as e:
+                print(f"Unexpected error: {e}")
 
-    return render_template('index.html', filename=filename, caption=caption[0]['generated_text'], image=image)
+    return render_template('index.html', filename=filename, caption=caption, image=image)
 
 if __name__ == '__main__':
     print('running this cell')

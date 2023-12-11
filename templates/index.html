@@ -26,7 +26,7 @@
 
     <div class = 'cap'>
       {% if caption %}
-      <p>Generated Caption: {{ caption }}</p>
+      <p>Generated Caption: {{ caption[0]['generated_text'] }}</p>
       {% endif %}
     </div>
 
