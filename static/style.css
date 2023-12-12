@@ -16,6 +16,14 @@ body{
     margin-right: auto;
 }
 
+.img2{
+    display: block;
+    height: 800px;
+    margin-left: 180px;
+    margin-right: auto;
+
+}
+
 .btn{
     margin-top: 80px;
     width: 100px;

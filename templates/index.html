@@ -30,13 +30,11 @@
       {% endif %}
     </div>
 
-    <div class="img">
+    <div class="img2">
         {% if image %}
-        <img src="{{url_for('static', filename = image )}}" alt="Generated Image" />
+        <img src="{{url_for('static', filename = 'output.jpg' )}}" alt="Generated Image" />
         {% endif %}
       </div>
-
-
 
     <script>
       function captureImage() {
